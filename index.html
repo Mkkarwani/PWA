@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="My Progressive Web App (PWA)">
+    <meta name="theme-color" content="#000000">
+    <title>My PWA</title>
+
+    <!-- Link to the manifest file -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Add icons for the PWA (should be included in your project directory) -->
+    <link rel="icon" href="icon-192x192.png" sizes="192x192">
+    <link rel="icon" href="icon-512x512.png" sizes="512x512">
+
+    <!-- External stylesheets or internal CSS can go here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Welcome to My Progressive Web App (PWA)</h1>
+    </header>
+
+    <div class="content">
+        <p>This is an example of a PWA hosted on GitHub Pages!</p>
+        <button class="btn" id="installButton">Install App</button>
+    </div>
+
+    <!-- Include the main JavaScript file -->
+    <script>
+        // Check if the service worker and PWA features are available in the browser
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function (error) {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+
+        // Handle "Add to Home Screen" or "Install PWA" event
+        let installPromptEvent;
+        const installButton = document.getElementById('installButton');
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            // Prevent the default install prompt from showing
+            event.preventDefault();
+            installPromptEvent = event;
+
+            // Show the install button
+            installButton.style.display = 'block';
+        });
+
+        installButton.addEventListener('click', () => {
+            if (installPromptEvent) {
+                // Show the install prompt
+                installPromptEvent.prompt();
+
+                installPromptEvent.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    installPromptEvent = null;
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
