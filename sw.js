@@ -1,11 +1,11 @@
-const CACHE_NAME = 'studyfreinds-cache';
+const CACHE_NAME = 'studyfreinds-cache-v1';
 const OFFLINE_URL = '/PWA/offline.html';
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll([
-                '/PWA/offline.html',
+                OFFLINE_URL,
                 '/PWA/styles.css',
                 '/PWA/script.js',
                 '/PWA/icons/icon-192x192.png',
@@ -34,13 +34,24 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     if (event.request.mode === 'navigate') {
         event.respondWith(
-            fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+            fetch(event.request)
+                .then((response) => {
+                    // Update the cache with the new response
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, clone);
+                    });
+                    return response;
+                })
+                .catch(() => {
+                    // Serve offline.html if the user is offline
+                    return caches.match(OFFLINE_URL);
+                })
         );
     } else {
         event.respondWith(
-            caches.match(event.request).then((response) => {
-                return response || fetch(event.request);
-            })
+            fetch(event.request)
+                .catch(() => caches.match(event.request)) // Serve from cache if offline
         );
     }
 });
