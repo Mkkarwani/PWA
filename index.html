@@ -3,55 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWA</title>
-    <link rel="manifest" href="/PWA/manifest.json">
+    <title>StudyFreinds Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <h1>Click below button to install the PWA.</h1>
-    <button id="installButton" style="display: none;">Install StudyFreinds Pro</button>
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/PWA/sw.js')
-            .then((registration) => {
-                console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch((error) => {
-                console.log('Service Worker registration failed:', error);
-            });
-    }
-</script>
-<script>
-    let deferredPrompt;
-    const installButton = document.getElementById('installButton');
-
-    window.addEventListener('beforeinstallprompt', (event) => {
-        event.preventDefault();
-        deferredPrompt = event;
-        installButton.style.display = 'block';
-
-        installButton.addEventListener('click', () => {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('PWA installed');
-                } else {
-                    console.log('PWA installation declined');
-                }
-                deferredPrompt = null;
-            });
-        });
-    });
-</script>
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/PWA/sw.js')
-            .then((registration) => {
-                console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch((error) => {
-                console.log('Service Worker registration failed:', error);
-            });
-    }
-</script>
+    <header>
+        <h1>Welcome to StudyFreinds Pro</h1>
+    </header>
+    <main>
+        <p>Click the button below to install the app:</p>
+        <button id="install-btn" hidden>Install App</button>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
