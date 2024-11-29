@@ -1,47 +1,63 @@
-const CACHE_NAME = 'studyfreinds-cache-v3';
+const CACHE_NAME = 'studyfreinds-cache-dynamic';
 const urlsToCache = [
-    '/PWA/home.html'
+    '/PWA/offline.html',
+    '/PWA/styles.css',
+    '/PWA/script.js',
+    '/PWA/icons/icon-192x192.png',
+    '/PWA/icons/icon-512x512.png'
 ];
 
-// Install Service Worker
+// Install event: Cache offline.html and static assets
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                console.log('Opened cache');
-                return cache.addAll(urlsToCache);
-            })
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(urlsToCache);
+        })
     );
+    self.skipWaiting();
 });
 
-// Fetch and Update Content
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        fetch(event.request)
-            .then((response) => {
-                // Clone and update cache
-                const responseClone = response.clone();
-                caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(event.request, responseClone);
-                });
-                return response;
-            })
-            .catch(() => caches.match(event.request)) // Use cache if offline
-    );
-});
-
-// Activate and Clean Old Cache
+// Activate event: Clean up old caches
 self.addEventListener('activate', (event) => {
-    const cacheWhitelist = [CACHE_NAME];
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
-                    if (!cacheWhitelist.includes(cacheName)) {
+                    if (cacheName !== CACHE_NAME) {
                         return caches.delete(cacheName);
                     }
                 })
             );
         })
     );
+    self.clients.claim();
+});
+
+// Fetch event: Network-first for navigation, cache-first for assets
+self.addEventListener('fetch', (event) => {
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    return response;
+                })
+                .catch(() => {
+                    return caches.match('/PWA/offline.html');
+                })
+        );
+    } else {
+        event.respondWith(
+            caches.match(event.request).then((cachedResponse) => {
+                return (
+                    cachedResponse ||
+                    fetch(event.request).then((response) => {
+                        return caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, response.clone());
+                            return response;
+                        });
+                    })
+                );
+            })
+        );
+    }
 });
