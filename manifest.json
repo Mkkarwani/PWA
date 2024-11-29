@@ -1,23 +1,20 @@
 {
-  "name": "StudyFreinds Pro",
-  "short_name": "StudyFreinds Pro",
-  "description": "The ultimate PWA experience for StudyFreinds.",
-  "start_url": "/PWA/home.html",
-  "display": "standalone",
-  "background_color": "#408cff",
-  "theme_color": "#408cff",
-  "icons": [
-    {
-      "src": "/PWA/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/PWA/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+    "name": "StudyFreinds Pro",
+    "short_name": "StudyFreinds",
+    "start_url": "/PWA/home.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0078d4",
+    "icons": [
+        {
+            "src": "/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
 }
