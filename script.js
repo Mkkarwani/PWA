@@ -32,3 +32,8 @@ window.addEventListener('beforeinstallprompt', (event) => {
     });
 });
 
+// Reload Page When Online
+window.addEventListener('online', () => {
+    console.log('Back online: Reloading to fetch latest content.');
+    location.reload();
+});
