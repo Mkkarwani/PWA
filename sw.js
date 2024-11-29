@@ -1,4 +1,4 @@
-const CACHE_NAME = 'studyfreinds-cache-v2';
+const CACHE_NAME = 'studyfreinds-cache-v3';
 const urlsToCache = [
     '/PWA/home.html'
 ];
