@@ -1,9 +1,6 @@
 const CACHE_NAME = 'studyfreinds-cache-v1';
 const urlsToCache = [
-    '/home.html',
-    '/index.html',
-    '/styles.css',
-    '/script.js'
+    '/home.html'
 ];
 
 // Install Service Worker
