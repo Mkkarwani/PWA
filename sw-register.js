@@ -15,3 +15,4 @@ window.addEventListener('online', () => {
     console.log('Back online: Reloading to fetch latest content.');
     location.reload();
 });
+
