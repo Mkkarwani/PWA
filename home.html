@@ -11,7 +11,7 @@
     <p>This is the home page 3</p>
 <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/PWA/sw.js')
+        navigator.serviceWorker.register('/PWA/sw.js?v=1')
             .then((registration) => {
                 console.log('Service Worker registered with scope:', registration.scope);
             })
