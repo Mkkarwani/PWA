@@ -1,34 +1,38 @@
-const CACHE_NAME = 'studyfreinds-cache-v1';
+const CACHE_NAME = 'dynamic-cache'; // Static name; no need to update manually
 const OFFLINE_URL = '/PWA/offline.html';
+const ASSETS = [
+    '/PWA/index.html',
+    '/PWA/home.html',
+    '/PWA/styles.css',
+    '/PWA/script.js',
+    '/PWA/sw-register.js',
+    '/PWA/offline.html',
+];
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll([
-                OFFLINE_URL,
-                '/PWA/styles.css',
-                '/PWA/script.js',
-                '/PWA/icons/icon-192x192.png',
-                '/PWA/icons/icon-512x512.png'
-            ]);
+            console.log('Caching assets...');
+            return cache.addAll(ASSETS);
         })
     );
-    self.skipWaiting();
+    self.skipWaiting(); // Activate new service worker immediately
 });
 
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
+        caches.keys().then((cacheNames) => 
+            Promise.all(
                 cacheNames.map((cache) => {
                     if (cache !== CACHE_NAME) {
+                        console.log('Deleting old cache:', cache);
                         return caches.delete(cache);
                     }
                 })
-            );
-        })
+            )
+        )
     );
-    self.clients.claim();
+    self.clients.claim(); // Start controlling all clients immediately
 });
 
 self.addEventListener('fetch', (event) => {
@@ -36,22 +40,26 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(event.request)
                 .then((response) => {
-                    // Update the cache with the new response
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, clone);
+                    return caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, response.clone()); // Update cache
+                        return response;
                     });
-                    return response;
                 })
-                .catch(() => {
-                    // Serve offline.html if the user is offline
-                    return caches.match(OFFLINE_URL);
-                })
+                .catch(() => caches.match(OFFLINE_URL)) // Serve offline page if offline
         );
     } else {
         event.respondWith(
-            fetch(event.request)
-                .catch(() => caches.match(event.request)) // Serve from cache if offline
+            caches.match(event.request).then((response) => {
+                return (
+                    response ||
+                    fetch(event.request).then((networkResponse) => {
+                        return caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, networkResponse.clone());
+                            return networkResponse;
+                        });
+                    })
+                );
+            })
         );
     }
 });
