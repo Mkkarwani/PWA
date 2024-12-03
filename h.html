@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .file-list {
+            margin-top: 20px;
+        }
+        .file-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .file-item button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available PDF Files</h1>
+    <div id="file-list" class="file-list"></div>
+
+    <script>
+        async function fetchFiles() {
+            try {
+                const response = await fetch('https://studyfreinds.22web.org/pro/fetch_files.php');
+                const files = await response.json();
+
+                const fileList = document.getElementById('file-list');
+                fileList.innerHTML = files.map(file => `
+                    <div class="file-item">
+                        <span>${file.title}</span>
+                        <form action="https://studyfreinds.22web.org/pro/serve_file.php" method="get" target="download_frame" style="margin: 0;">
+                            <input type="hidden" name="id" value="${file.id}">
+                            <button type="submit">Download</button>
+                        </form>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching files:', error);
+            }
+        }
+
+        // Create an invisible iframe to handle downloads
+        const iframe = document.createElement('iframe');
+        iframe.name = 'download_frame';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+
+        // Fetch and display files on page load
+        fetchFiles();
+    </script>
+</body>
+</html>
