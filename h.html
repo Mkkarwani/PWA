@@ -39,13 +39,14 @@
     <div id="file-list" class="file-list"></div>
 
     <script>
-        function fetchFilesJSONP() {
-    const script = document.createElement('script');
-    script.src = 'https://studyfreinds.22web.org/pro/fetch_files.php?callback=handleFiles';
-    document.body.appendChild(script);
-}
+        function handleFiles(files) {
+    console.log('Files fetched:', files);
 
-function handleFiles(files) {
+    if (!files || files.length === 0) {
+        console.error('No files to display.');
+        return;
+    }
+
     const fileList = document.getElementById('file-list');
     fileList.innerHTML = files.map(file => `
         <div class="file-item">
