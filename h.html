@@ -41,7 +41,8 @@
     <script>
         async function fetchFiles() {
     try {
-        const response = await fetch('https://studyfreinds.22web.org/pro/fetch_files.php');
+        const response = await fetch('https://cors-anywhere.herokuapp.com/https://studyfreinds.22web.org/pro/fetch_files.php');
+
         if (!response.ok) throw new Error(`HTTP status ${response.status}`);
         const files = await response.json();
 
