@@ -39,29 +39,26 @@
     <div id="file-list" class="file-list"></div>
 
     <script>
-        async function fetchFiles() {
-    try {
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const targetUrl = 'https://studyfreinds.22web.org/pro/fetch_files.php';
-        const response = await fetch(proxyUrl + targetUrl);
-        if (!response.ok) throw new Error(`HTTP status ${response.status}`);
-        const files = await response.json();
-
-        const fileList = document.getElementById('file-list');
-        fileList.innerHTML = files.map(file => `
-            <div class="file-item">
-                <span>${file.title}</span>
-                <form action="https://y/serve_file.php" method="get" target="download_frame">
-                    <input type="hidden" name="id" value="${file.id}">
-                    <button type="submit">Download</button>
-                </form>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error('Error fetching files:', error);
-        alert('Unable to fetch files. Please try again later.');
-    }
+        function fetchFilesJSONP() {
+    const script = document.createElement('script');
+    script.src = 'https://studyfreinds.22web.org/pro/fetch_files.php?callback=handleFiles';
+    document.body.appendChild(script);
 }
+
+function handleFiles(files) {
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = files.map(file => `
+        <div class="file-item">
+            <span>${file.title}</span>
+            <form action="https://your-infinityfree-domain/serve_file.php" method="get" target="download_frame">
+                <input type="hidden" name="id" value="${file.id}">
+                <button type="submit">Download</button>
+            </form>
+        </div>
+    `).join('');
+}
+
+fetchFilesJSONP();
 
 
 
