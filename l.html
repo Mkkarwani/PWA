@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Preview</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #fileList {
+      margin: 20px;
+    }
+    #viewer {
+      display: none;
+      margin: 20px auto;
+      text-align: center;
+    }
+    #pdfCanvas {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 0;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div id="fileList">
+    <h2>Available Files</h2>
+    <ul>
+      <li>
+        example1.enc
+        <button class="read-button" data-file="example1.enc">Read</button>
+      </li>
+      <li>
+        example2.enc
+        <button class="read-button" data-file="example2.enc">Read</button>
+      </li>
+    </ul>
+  </div>
+
+  <div id="viewer">
+    <h2>PDF Preview</h2>
+    <canvas id="pdfCanvas"></canvas>
+    <br>
+    <button id="backButton">Back to Files</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
