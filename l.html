@@ -44,12 +44,18 @@
     <button id="selectFileButton">Select and Read File</button>
   </div>
 
-  <div id="viewer">
-    <h2>PDF Preview</h2>
-    <canvas id="pdfCanvas"></canvas>
-    <br>
-    <button id="backButton">Back to File Selection</button>
+ <div id="viewer">
+  <h2>PDF Preview</h2>
+  <div>
+    <button id="prevPage">Previous Page</button>
+    <span>Page: <span id="pageNum">1</span> / <span id="pageCount">0</span></span>
+    <button id="nextPage">Next Page</button>
   </div>
+  <canvas id="pdfCanvas"></canvas>
+  <br>
+  <button id="backButton">Back to File Selection</button>
+</div>
+
 
   <script src="app.js"></script>
 </body>
