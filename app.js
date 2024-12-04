@@ -1,31 +1,28 @@
 // Elements
-const fileList = document.getElementById("fileList");
-const viewer = document.getElementById("viewer");
-const pdfCanvas = document.getElementById("pdfCanvas");
+const selectFileButton = document.getElementById("selectFileButton");
 const backButton = document.getElementById("backButton");
-const fileButtons = document.querySelectorAll(".read-button");
+const viewer = document.getElementById("viewer");
+const fileList = document.getElementById("fileList");
+const pdfCanvas = document.getElementById("pdfCanvas");
 
 // PDF.js configurations
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.worker.min.js";
 
 // Function to handle reading and previewing a file
-function readFile(fileName) {
-  const downloadPath = `${navigator.storage.getDirectory}/Download/${fileName}`;
+function readFile(file) {
+  const reader = new FileReader();
 
-  fetch(downloadPath)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("File not found.");
-      }
-      return response.arrayBuffer();
-    })
-    .then((arrayBuffer) => {
-      renderPDF(arrayBuffer);
-    })
-    .catch((error) => {
-      alert("Error reading file: " + error.message);
-    });
+  reader.onload = function (event) {
+    const arrayBuffer = event.target.result;
+    renderPDF(arrayBuffer);
+  };
+
+  reader.onerror = function () {
+    alert("Error reading file.");
+  };
+
+  reader.readAsArrayBuffer(file);
 }
 
 // Function to render PDF using PDF.js
@@ -57,15 +54,33 @@ function renderPDF(arrayBuffer) {
     });
 }
 
-// Event listener for "Read" buttons
-fileButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const fileName = button.dataset.file.replace(".enc", ".pdf");
-    readFile(fileName);
-  });
+// Event listener for file selection
+selectFileButton.addEventListener("click", async () => {
+  try {
+    // Open file picker dialog
+    const [fileHandle] = await window.showOpenFilePicker({
+      types: [
+        {
+          description: "Encrypted Files",
+          accept: {
+            "application/octet-stream": [".enc"],
+          },
+        },
+      ],
+      multiple: false,
+    });
+
+    // Get file object
+    const file = await fileHandle.getFile();
+
+    // Read and render the file
+    readFile(file);
+  } catch (err) {
+    alert("No file selected or operation canceled.");
+  }
 });
 
-// Event listener for "Back to Files" button
+// Event listener for "Back to File Selection" button
 backButton.addEventListener("click", () => {
   viewer.style.display = "none";
   fileList.style.display = "block";
