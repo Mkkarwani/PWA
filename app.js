@@ -1,73 +1,58 @@
-// Elements
-const prevPageButton = document.getElementById("prevPage");
-const nextPageButton = document.getElementById("nextPage");
-const pageNumSpan = document.getElementById("pageNum");
-const pageCountSpan = document.getElementById("pageCount");
-
-let pdfDoc = null;
 let currentPage = 1;
+let pdfDoc = null;
 
-// Function to render a specific page
-function renderPage(pageNumber) {
-  pdfDoc.getPage(pageNumber).then((page) => {
-    const viewport = page.getViewport({ scale: 1.5 });
-    const context = pdfCanvas.getContext("2d");
+function handleFileSelection(event) {
+    const file = event.target.files[0];
 
-    pdfCanvas.width = viewport.width;
-    pdfCanvas.height = viewport.height;
+    if (!file) return;
 
-    const renderContext = {
-      canvasContext: context,
-      viewport: viewport,
+    // Rename the file extension from .enc to .pdf
+    const renamedFile = new File([file], file.name.replace(/\.enc$/, '.pdf'), { type: 'application/pdf' });
+
+    // Use FileReader to read the file as Data URL
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const pdfData = e.target.result;
+
+        // Load the PDF using PDF.js
+        pdfjsLib.getDocument({data: pdfData}).promise.then(function(pdf) {
+            pdfDoc = pdf;
+            renderPage(currentPage);
+        });
     };
 
-    return page.render(renderContext).promise;
-  });
+    reader.readAsArrayBuffer(renamedFile);
 }
 
-// Function to load the PDF and initialize navigation
-function loadPDF(arrayBuffer) {
-  const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+function renderPage(pageNum) {
+    pdfDoc.getPage(pageNum).then(function(page) {
+        const canvas = document.getElementById('pdfCanvas');
+        const ctx = canvas.getContext('2d');
+        const viewport = page.getViewport({ scale: 1 });
 
-  loadingTask.promise
-    .then((pdf) => {
-      pdfDoc = pdf;
-      pageCountSpan.textContent = pdf.numPages;
-      renderPage(currentPage);
-    })
-    .catch((err) => {
-      alert("Error loading PDF: " + err.message);
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        page.render({
+            canvasContext: ctx,
+            viewport: viewport
+        });
     });
 }
 
-// Event listener for "Previous Page" button
-prevPageButton.addEventListener("click", () => {
-  if (currentPage <= 1) return;
-  currentPage -= 1;
-  pageNumSpan.textContent = currentPage;
-  renderPage(currentPage);
-});
-
-// Event listener for "Next Page" button
-nextPageButton.addEventListener("click", () => {
-  if (currentPage >= pdfDoc.numPages) return;
-  currentPage += 1;
-  pageNumSpan.textContent = currentPage;
-  renderPage(currentPage);
-});
-
-// Modified "readFile" function to use "loadPDF"
-function readFile(file) {
-  const reader = new FileReader();
-
-  reader.onload = function (event) {
-    const arrayBuffer = event.target.result;
-    loadPDF(arrayBuffer);
-  };
-
-  reader.onerror = function () {
-    alert("Error reading file.");
-  };
-
-  reader.readAsArrayBuffer(file);
+function goToPreviousPage() {
+    if (currentPage <= 1) return;
+    currentPage--;
+    renderPage(currentPage);
 }
+
+function goToNextPage() {
+    if (currentPage >= pdfDoc.numPages) return;
+    currentPage++;
+    renderPage(currentPage);
+}
+
+// Disable right-click to prevent download option
+document.addEventListener("contextmenu", function(event) {
+    event.preventDefault();
+});
