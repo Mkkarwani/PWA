@@ -8,7 +8,6 @@ const backToFiles = document.getElementById("backToFiles");
 const files = [
   { id: 1, name: "example1.enc", url: "example1.enc" },
   { id: 2, name: "example2.enc", url: "example2.enc" },
-  { id: 3, name: "example1.enc", url: "example1.enc" }
 ];
 
 // Load files into the list
@@ -46,6 +45,7 @@ function handleDownload(file) {
   link.download = file.name;
   link.click();
 
+  console.log(`Downloaded: ${file.name}`);
   // Enable the "Read" button after download
   const readButton = document.querySelector(`#file-${file.id} .read-button`);
   readButton.style.display = "inline";
@@ -54,15 +54,21 @@ function handleDownload(file) {
 // Handle file selection and read
 function handleFileSelection(event, file) {
   const selectedFile = event.target.files[0];
+  console.log("Selected File:", selectedFile);
+
   if (selectedFile && selectedFile.name === file.name) {
     const reader = new FileReader();
 
-    // Read the .enc file and simulate conversion to .pdf
     reader.onload = function () {
+      console.log("File Read Successfully");
       const arrayBuffer = reader.result;
 
       // Render the file using PDF.js
       renderPDF(arrayBuffer);
+    };
+
+    reader.onerror = function (error) {
+      console.error("Error Reading File:", error);
     };
 
     reader.readAsArrayBuffer(selectedFile);
@@ -80,6 +86,7 @@ function renderPDF(arrayBuffer) {
   loadingTask.promise
     .then((pdf) => pdf.getPage(1))
     .then((page) => {
+      console.log("Rendering PDF Page");
       const viewport = page.getViewport({ scale: 1 });
       const context = pdfCanvas.getContext("2d");
       pdfCanvas.height = viewport.height;
@@ -90,14 +97,15 @@ function renderPDF(arrayBuffer) {
         viewport: viewport,
       };
 
-      page.render(renderContext);
-
-      // Show the viewer section
+      return page.render(renderContext).promise;
+    })
+    .then(() => {
+      console.log("PDF Rendered Successfully");
       viewerSection.style.display = "block";
       document.getElementById("fileList").style.display = "none";
     })
     .catch((err) => {
-      console.error("Error loading PDF:", err);
+      console.error("Error Loading or Rendering PDF:", err);
     });
 }
 
