@@ -8,6 +8,8 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
     }
     #fileList {
       margin: 20px;
@@ -38,23 +40,14 @@
 <body>
   <div id="fileList">
     <h2>Available Files</h2>
-    <ul>
-      <li>
-        example1.enc
-        <button class="read-button" data-file="example1.enc">Read</button>
-      </li>
-      <li>
-        example2.enc
-        <button class="read-button" data-file="example2.enc">Read</button>
-      </li>
-    </ul>
+    <button id="selectFileButton">Select and Read File</button>
   </div>
 
   <div id="viewer">
     <h2>PDF Preview</h2>
     <canvas id="pdfCanvas"></canvas>
     <br>
-    <button id="backButton">Back to Files</button>
+    <button id="backButton">Back to File Selection</button>
   </div>
 
   <script src="app.js"></script>
