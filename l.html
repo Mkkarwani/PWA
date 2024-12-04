@@ -1,62 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF Preview</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
-    #fileList {
-      margin: 20px;
-    }
-    #viewer {
-      display: none;
-      margin: 20px auto;
-      text-align: center;
-    }
-    #pdfCanvas {
-      border: 1px solid #ccc;
-      margin-top: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 10px 0;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:disabled {
-      background-color: #ccc;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Preview</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="fileList">
-    <h2>Available Files</h2>
-    <input type="file" id="fileInput" accept=".enc" style="display: none;" />
-    <button id="selectFileButton">Select and Read File</button>
-  </div>
 
- <div id="viewer">
-  <h2>PDF Preview</h2>
-  <div>
-    <button id="prevPage">Previous Page</button>
-    <span>Page: <span id="pageNum">1</span> / <span id="pageCount">0</span></span>
-    <button id="nextPage">Next Page</button>
-  </div>
-  <canvas id="pdfCanvas"></canvas>
-  <br>
-  <button id="backButton">Back to File Selection</button>
-</div>
+    <div class="container">
+        <h1>PDF Previewer</h1>
+        
+        <input type="file" id="fileInput" accept=".enc" onchange="handleFileSelection(event)">
+        
+        <div id="pdfContainer">
+            <canvas id="pdfCanvas"></canvas>
+        </div>
 
+        <div class="controls">
+            <button id="prevBtn" onclick="goToPreviousPage()">Previous</button>
+            <button id="nextBtn" onclick="goToNextPage()">Next</button>
+        </div>
+    </div>
 
-  <script src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="script.js"></script>
+
 </body>
 </html>
