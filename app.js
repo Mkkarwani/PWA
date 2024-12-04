@@ -1,5 +1,6 @@
 // Elements
 const selectFileButton = document.getElementById("selectFileButton");
+const fileInput = document.getElementById("fileInput");
 const backButton = document.getElementById("backButton");
 const viewer = document.getElementById("viewer");
 const fileList = document.getElementById("fileList");
@@ -54,29 +55,18 @@ function renderPDF(arrayBuffer) {
     });
 }
 
-// Event listener for file selection
-selectFileButton.addEventListener("click", async () => {
-  try {
-    // Open file picker dialog
-    const [fileHandle] = await window.showOpenFilePicker({
-      types: [
-        {
-          description: "Encrypted Files",
-          accept: {
-            "application/octet-stream": [".enc"],
-          },
-        },
-      ],
-      multiple: false,
-    });
+// Event listener for the "Select File" button
+selectFileButton.addEventListener("click", () => {
+  fileInput.click(); // Trigger the hidden file input
+});
 
-    // Get file object
-    const file = await fileHandle.getFile();
-
-    // Read and render the file
+// Event listener for the file input
+fileInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (file) {
     readFile(file);
-  } catch (err) {
-    alert("No file selected or operation canceled.");
+  } else {
+    alert("No file selected.");
   }
 });
 
