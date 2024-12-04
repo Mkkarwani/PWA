@@ -8,6 +8,7 @@ const backToFiles = document.getElementById("backToFiles");
 const files = [
   { id: 1, name: "example1.enc", url: "example1.enc" },
   { id: 2, name: "example2.enc", url: "example2.enc" },
+  { id: 3, name: "example1.enc", url: "example1.enc" }
 ];
 
 // Load files into the list
