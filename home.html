@@ -1,19 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
     <title>Home - StudyFreinds Pro</title>
     <link rel="manifest" href="/PWA/manifest.json">
-    <link rel="stylesheet" href="/PWA/styles.css">
+    <script src="/PWA/theme.js" defer></script>
     <script src="/PWA/sw-register.js" defer></script> <!-- Service worker registration -->
+    
+    <title>StudyFreinds Pro</title>
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Light theme (default) */
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #333;
+            --header-bg-color: #408cff;
+            --header-text-color: #fff;
+            --card-bg-color: #fff;
+            --card-shadow-color: rgba(0, 0, 0, 0.1);
+            --footer-bg-color: #333;
+            --footer-text-color: #fff;
+        }
+
+        /* Dark theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #e0e0e0;
+                --header-bg-color: #1a73e8;
+                --header-text-color: #fff;
+                --card-bg-color: #1e1e1e;
+                --card-shadow-color: rgba(0, 0, 0, 0.5);
+                --footer-bg-color: #1e1e1e;
+                --footer-text-color: #e0e0e0;
+            }
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Header */
+        header {
+            background-color: var(--header-bg-color);
+            color: var(--header-text-color);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        header .nav-links a {
+            margin-left: 2rem;
+            font-size: 1rem;
+            color: var(--header-text-color);
+        }
+
+        header .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Welcome section */
+        .welcome {
+            text-align: center;
+            padding: 5rem 1rem;
+            background-color: var(--card-bg-color);
+            box-shadow: 0 4px 8px var(--card-shadow-color);
+            margin-bottom: 2rem;
+        }
+
+        .welcome h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome .sub-title {
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        /* Services section */
+        .services {
+            padding: 2rem 5%;
+            background-color: var(--bg-color);
+        }
+
+        .services h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: var(--text-color);
+        }
+
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-item {
+            background-color: var(--card-bg-color);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--card-shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .service-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--header-bg-color);
+        }
+
+        .service-item p {
+            color: var(--text-color);
+        }
+
+        /* Links Section */
+        .links-section {
+            padding: 2rem 5%;
+            background-color: var(--bg-color);
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .link-card {
+            background-color: var(--card-bg-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px var(--card-shadow-color);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .link-card:hover {
+            box-shadow: 0 6px 18px var(--card-shadow-color);
+            transform: translateY(-5px);
+        }
+
+        .link-card h3 {
+            font-size: 1.2rem;
+            color: var(--header-bg-color);
+        }
+
+        .link-card p {
+            color: var(--text-color);
+        }
+
+        /* Notice section */
+        .notice-section {
+            padding: 3rem 5%;
+            background-color: var(--card-bg-color);
+        }
+
+        .notice-header {
+            background-color: var(--header-bg-color);
+            color: var(--header-text-color);
+            padding: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+        }
+
+        .notice-content iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            margin-top: -5px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 1rem 5%;
+            background-color: var(--footer-bg-color);
+            color: var(--footer-text-color);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header .nav-links {
+                margin-top: 1rem;
+                text-align: center;
+                width: 100%;
+            }
+
+            .services h2, .notice-header {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            header .logo {
+                font-size: 1.5rem;
+            }
+
+            .welcome h1 {
+                font-size: 2rem;
+            }
+
+            .services h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>        
 </head>
 <body>
-    <h1>Welcome to StudyFreinds Pro</h1>
-    <p>This is the home page of the app. 12</p><a href="https://studyfreinds.22web.org/">Click me</a> <a href="pdf.html">ggg</a>
-<Iframe src="https://mkkarwani.github.io/Hariji/" height="500px" width="500px"></iframe>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">StudyFreinds Pro</div>
+        <div class="nav-links">
+            <a href="about.html">About</a>
+            <a href="mailto:studyfreinds@hotmail.com">Contact</a>
+        </div>
+    </header>
+
+    <!-- Welcome Section -->
+    <section class="welcome">
+        <h1>Welcome to StúdÿFreíñds<sup>+</sup></h1>
+        <p class="sub-title">Your one-stop solution for all educational needs</p>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services">
+        <h2>Our Services</h2>
+        <div class="service-list">
+            <div class="service-item">
+                <h3>Free Videos</h3>
+                <p>Access free videos on important topics for all subjects.</p>
+            </div>
+            <div class="service-item">
+                <h3>Free E-Books</h3>
+                <p>Read free E-books for all your study materials.</p>
+            </div>
+            <div class="service-item">
+                <h3>Latest Updates</h3>
+                <p>Stay updated with the latest educational news and information.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Links Section -->
+    <section class="links-section">
+        <div class="link-grid">
+            <a href="sy.html" class="link-card">
+                <h3>Syllabus</h3>
+                <p>Download syllabus for second and third-year subjects.</p>
+            </a>
+            <a href="vy.html" class="link-card">
+                <h3>Videos</h3>
+                <p>Watch important topic videos for second and third-year subjects.</p>
+            </a>
+            <a href="eby.html" class="link-card">
+                <h3>E-Books</h3>
+                <p>Read E-books for second and third-year subjects.</p>
+            </a>
+            <a href="vmy.html" class="link-card">
+                <h3>VMI Notes</h3>
+                <p>Download important notes for exams.</p>
+            </a>
+            <a href="cceinfo.html" class="link-card">
+                <h3>CCE Information</h3>
+                <p>Get CCE info for second, third-year students, and ex-students.</p>
+            </a>
+            <a href="#" class="link-card">
+                <h3>Notice & Circular</h3>
+                <p>View latest updates and circulars related to college.</p>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 StudyFreinds Pro. All rights reserved.</p>
+    </footer>
+
 </body>
 </html>
