@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Light theme (default) */
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #333;
+            --header-bg-color: #408cff;
+            --header-text-color: #fff;
+            --footer-bg-color: #333;
+            --footer-text-color: #fff;
+        }
+
+        /* Dark theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #e0e0e0;
+                --header-bg-color: #1a73e8;
+                --header-text-color: #fff;
+                --container: #1e1e1e;                
+                --footer-bg-color: #1e1e1e;
+                --footer-text-color: #e0e0e0;
+            }
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Header */
+        header {
+            background-color: var(--header-bg-color);
+            color: var(--header-text-color);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        header .nav-links a {
+            margin-left: 2rem;
+            font-size: 1rem;
+            color: var(--header-text-color);
+        }
+
+        header .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* About Us Section */
+        section {
+            padding: 20px;
+        }
+        
+        .about-us {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            background: var(--container);
+            color: var(--text-color);
+        }
+
+        .about-us h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #0f3460;
+        }
+
+        .about-us p {
+            margin-bottom: 16px;
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .about-us ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .about-us ul li {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 1rem 5%;
+            background-color: var(--footer-bg-color);
+            color: var(--footer-text-color);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            header .nav-links {
+                margin-top: 1rem;
+                text-align: center;
+                width: 100%;
+            }
+
+            .about-us h1 {
+                font-size: 24px;
+            }
+
+            .about-us p, .about-us ul li {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            header .logo {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">StudyFreinds Pro</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="mailto:studyfreinds@hotmail.com">Contact</a>
+        </div>
+    </header>
+
+    <!-- About Us Section -->
+    <section>
+    <div class="about-us">
+        <h1>About Us</h1>
+        <p>StudyFreinds Pro is a platform designed to make studying easier for students who are unable to attend classes regularly or afford high costs for their education. We are committed to providing quick learning resources for students in remote areas, free of charge.</p>
+        <p>Our offerings include:</p>
+        <ul>
+            <li>Videos on important topics for all subjects</li>
+            <li>E-Books for every subject</li>
+            <li>All latest information and updates in one place</li>
+            <li>Additional study-related resources and much more</li>
+        </ul>
+        <p>We currently serve only the students of the Commerce Faculty at Government P.G. College, Satna (M.P.). We neither charge money nor request personal details for verification. Our sole aim is to support students in remote areas by providing accessible study materials.</p>
+        <p>We leverage Google's services like YouTube and Google Drive & Microsoft's GitHub to deliver study resources effectively. We extend our heartfelt gratitude to Google & Microsoft for making these services freely available to our students.</p>
+        <p>Our mission is to reduce the cost of educational resources for students who cannot afford them, ensuring equal learning opportunities for everyone.</p>
+    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 StudyFreinds Pro. All rights reserved.
+    </footer>
+</body>
+</html>
