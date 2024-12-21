@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Light theme (default) */
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #333;
+            --header-bg-color: #408cff;
+            --header-text-color: #fff;
+            --footer-bg-color: #333;
+            --footer-text-color: #fff;
+        }
+
+        /* Dark theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #e0e0e0;
+                --header-bg-color: #1a73e8;
+                --header-text-color: #fff;
+                --footer-bg-color: #1e1e1e;
+                --footer-text-color: #e0e0e0;
+            }
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--header-bg-color);
+            color: var(--header-text-color);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        header .nav-links a {
+            margin-left: 2rem;
+            font-size: 1rem;
+            color: var(--header-text-color);
+        }
+
+        header .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            flex: 1;
+            width: 90%;
+            max-width: 600px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 20px auto;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #0f3460;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .details {
+            margin: 20px 0;
+            text-align: left;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+        }
+
+        .download-btn:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            header, footer {
+                font-size: 16px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .details {
+                font-size: 16px;
+            }
+        }
+        /* Footer */
+        footer {
+            padding: 1rem 5%;
+            background-color: var(--footer-bg-color);
+            color: var(--footer-text-color);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+         /* Responsive Design */
+        @media (max-width: 768px) {
+            header .nav-links {
+                margin-top: 1rem;
+                text-align: center;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            header .logo {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">StudyFreinds Pro</div>
+        <div class="nav-links">
+            <a href="about.html">About</a>
+            <a href="mailto:studyfreinds@hotmail.com">Contact</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Select Subject and Medium</h1>
+        <select id="medium">
+            <option value="">Select Medium</option>
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+        </select>
+        <select id="subject">
+            <option value="">Select Subject</option>
+        </select>
+        <div class="details" id="details"></div>
+        <a href="#" id="download-btn" class="download-btn" style="display: none;">Download</a>
+    </div>
+
+    <footer>
+        &copy; 2024 Subject Details Portal. All rights reserved.
+    </footer>
+
+    <script>
+    // Updated JSON data to allow multiple descriptions and links
+    const data = {
+        English: {
+            'Cost Control & Analysis': [
+                { description: "Cost Control & Analysis Complete Ebook.", link: "https://mkkarwani.github.io/PWA/offlinefiles/cost/Cost Control & Analysis English.enc" }
+            ],
+            'Advance Statistical Analysis': [
+                { description: "Advance Statistical Analysis Complete Ebook.", link: "https://mkkarwani.github.io/PWA/offlinefiles/statistics/Advance Statistical Analysis English.enc" }
+            ],
+            'Organisational Behaviour': [
+                { description: "Organisational Behaviour Ebook from unit 2 - 5", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Organizational Behaviour English.enc" },
+                {description: "Organisational Behaviour Complete Book", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/SBAA1306.enc"}
+               ],
+               "Functional Management": [
+                   { description: "Functional and Strategic Management : Unit-1", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/Functional_and_Strategic_Management.enc"},
+                   { description: "Financial Management : Unit-2", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/Financial.enc"},
+                   { description: "Marketing Management : Unit-3", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/Marketing.enc"},
+                   { description: "Personnel Management : Unit-4", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/HRM.enc"},
+                   { description: "Functional Management Complete Book From 2nd to 5th Units", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/Functional-Management (2).enc"},
+                   { description: "Functional Management Complete Book From 2nd to 5th Units", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/Functional MAnagement MC-204.enc"},
+               ],
+               "Reasearch Methodology Common Subject": [
+                  { description: "Research Methodology Complete Book Version: 1", link: "https://mkkarwani.github.io/PWA/offlinefiles/rmcommon/Research Methodology English .enc" },
+                  { description: "Research Methodology Complete Book Version: 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/rmcommon/MCM3C13.enc" }
+               ],
+               "Research Methodology Subject Specific ( Only For Honors With Research )": [
+                   { description: "Research Methodology Complete Book Version: 1", link: "https://mkkarwani.github.io/PWA/offlinefiles/rmspecial/Research Methodology English 1.enc" },
+                  { description: "Research Methodology Complete Book Version: 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/rmspecial/Research Methodology English 2.enc" }
+               ]
+        },
+        Hindi: {
+            'लागत नियंत्रण और विश्लेषण': [
+                { description: "लागत नियंत्रण और विश्लेषण सम्पूर्ण ई-बुक।", link: "https://mkkarwani.github.io/PWA/offlinefiles/cost/Cost Control & Analysis Hindi.enc" }
+            ],
+            'उच्चतर सांख्यिकीय विश्लेषण': [
+                { description: "उच्चतर सांख्यिकीय विश्लेषण सम्पूर्ण ई-बुक।", link: "https://mkkarwani.github.io/PWA/offlinefiles/statistics/Advance Statistical Analysis Hindi.enc" }
+            ],
+            'संगठनात्मक व्यवहार': [
+                { description: "संगठनात्मक व्यवहार इकाई 2 से 5 तक", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Organizational Behaviour Hindi.enc" },
+                {description: "संगठनात्मक व्यवहार संपूर्ण ई-बुक", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/SBAA1306 (1).enc"},
+                { description: "संगठनात्मक व्यवहार की अवधारणा और प्रासंगिकता: इकाई - 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Block-1 (1).enc" },
+                {description: "संगठनात्मक व्यवहार: अर्थ, विशेषताएं, महत्व और मॉडल: इकाई - 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-1 (3).enc"},
+                { description: "व्यक्तिगत व्यवहार का मूलाधार: निर्धारक, मॉडल और अवबोधन: इकाई - 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-2 (2).enc" },
+                {description: "व्यक्तिगत व्यवहार को समझना: इकाई - 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Block-2.enc"},
+                { description: "कर्मचारी अभिवृत्ति और कार्य संतुष्टि: इकाई - 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-3 (4).enc" },
+                {description: "शिक्षण: प्रकृति और सिद्धांत: इकाई - 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-4 (1).enc"},
+                { description: "संगठनात्मक व्यवहार: प्रमुख पहलू: इकाई - 3", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Block-3 (1).enc" },
+                {description: "अभिप्रेरणा: अवधारणा और सिद्धांत: इकाई - 3", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-5 (2) (1).enc"},
+                { description: "समूह की गति की प्रकृति: इकाई - 3", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-6 (1).enc" },
+                {description: "टीम कार्य: प्रकृति, प्रभावकारिता और बाधा डालना: इकाई - 3", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-7 (1).enc"},
+                { description: "संचार: अर्थ, प्रकृति और प्रक्रिया: इकाई - 3", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-8 (1).enc" },
+                {description: "नेतृत्व: अवधारणा और सिद्धांत: इकाई - 3", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-9 (1).enc"},
+                { description: "संगठनों और संगठनात्मक प्रणाली में जीवन: इकाई - 4", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Block-4.enc" },
+                {description: "संगठनात्मक संघर्ष: अर्थ, प्रक्रिया और प्रकार: इकाई - 4", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-10 (1).enc"},
+                { description: "समझौते की अवधारणा, प्रक्रिया और दृष्टिकोण: इकाई - 4", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-11 (1).enc" },
+                {description: "परिवर्तन: प्रक्रिया और प्रबंधन: इकाई - 4", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-12 (1).enc"},
+                { description: "संस्कृति: अर्थ, प्रकार और प्रकृति: इकाई - 5", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-13 (1).enc" },
+                {description: "संगठनात्मक परिवर्तन और विकास: अवधारणा और तकनीकें: इकाई - 5", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-14 (1).enc"},
+                { description: "तनाव: प्रकृति, परिणाम और प्रबंधन: इकाई - 5", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-15 (1).enc" },
+                {description: "मॉडल: चुनौतियां और अवसर: इकाई - 5", link: "https://mkkarwani.github.io/PWA/offlinefiles/organization/Unit-16 (1).enc"},
+               ],
+               "कार्यात्मक प्रबंधन": [
+                   { description: "कार्यात्मक तथा रणनीतिक प्रबंधन : इकाई-1", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/functional and strategic management hindi.enc"},
+                   { description: "वित्तीय प्रबंधन : इकाई-2", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/Financial Hindi.enc"},
+                   { description: "विपणन प्रबंधन : इकाई-3", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/Marketing hindi.enc"},
+                   { description: "कार्मिक प्रबंधन : इकाई-4", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/HRM hindi.enc"},
+                   { description: "कार्यात्मक प्रबंधन 2 से 5 इकाइयों तक की संपूर्ण पुस्तक", link: "https://mkkarwani.github.io/PWA/offlinefiles/functional/Functional-Management Hindi.enc"},
+                   
+               ],
+               "शोध प्रविधि सामान्य विषय": [
+                  { description: "शोध प्रविधि संपूर्ण ई-बुक Version: 1", link: "https://mkkarwani.github.io/PWA/offlinefiles/rmcommon/research_methodology Hindi.enc" },
+                  { description: "शोध प्रविधि संपूर्ण ई-बुक Version: 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/rmcommon/MyFile (6).enc" }
+               ],
+               "शोध प्रविधि विषय विशिष्ट ( केवल ऑनर्स विथ रिसर्च के स्टूडेंट्स के लिए )": [
+                   { description: "शोध प्रविधि संपूर्ण ई-बुक Version: 1", link: "https://mkkarwani.github.io/PWA/offlinefiles/rmspecial/Research Methodology Hindi 1.enc" },
+                  { description: "शोध प्रविधि संपूर्ण ई-बुक Version: 2", link: "https://mkkarwani.github.io/PWA/offlinefiles/rmspecial/Research Methodology Hindi 2.enc" }
+               ]
+        }
+    };
+
+    const mediumSelect = document.getElementById('medium');
+    const subjectSelect = document.getElementById('subject');
+    const detailsDiv = document.getElementById('details');
+    const downloadBtn = document.getElementById('download-btn');
+
+    // Populate subjects based on selected medium
+    mediumSelect.addEventListener('change', () => {
+        const medium = mediumSelect.value;
+        subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+        detailsDiv.innerHTML = '';
+        downloadBtn.style.display = 'none';
+
+        if (medium && data[medium]) {
+            Object.keys(data[medium]).forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+        }
+    });
+
+    // Display details and download links based on selected subject
+    subjectSelect.addEventListener('change', () => {
+        const medium = mediumSelect.value;
+        const subject = subjectSelect.value;
+
+        detailsDiv.innerHTML = '';
+        downloadBtn.style.display = 'none';
+
+        if (medium && subject && data[medium][subject]) {
+            const items = data[medium][subject];
+            items.forEach(item => {
+                const descriptionElement = document.createElement('p');
+                const linkElement = document.createElement('a');
+
+                descriptionElement.textContent = item.description;
+                linkElement.href = item.link;
+                linkElement.textContent = "Download";
+                linkElement.className = "download-btn";
+
+                detailsDiv.appendChild(descriptionElement);
+                detailsDiv.appendChild(linkElement);
+                detailsDiv.appendChild(document.createElement('br'));
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
