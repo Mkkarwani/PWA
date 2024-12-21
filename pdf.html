@@ -111,103 +111,124 @@
 
     <!-- Include PDF.js library as an ES module -->
     <script type="module">
-        import * as pdfjsLib from './pdfjs/pdf.mjs';
+    import * as pdfjsLib from './pdfjs/pdf.mjs';
 
-        pdfjsLib.GlobalWorkerOptions.workerSrc = './pdfjs/pdf.worker.mjs';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = './pdfjs/pdf.worker.mjs';
 
-        let pdfDoc = null;
-        let isRendering = false;
-        let currentPage = 1;
+    let pdfDoc = null;
+    let isRendering = false;
+    let currentPage = 1;
 
-        const pdfContainer = document.getElementById('pdfContainer');
-        const pageInfo = document.getElementById('pageInfo');
-        const fileNameSpan = document.getElementById('fileName');
+    const pdfContainer = document.getElementById('pdfContainer');
+    const pageInfo = document.getElementById('pageInfo');
+    const fileNameSpan = document.getElementById('fileName');
 
-        function handleFileSelection(event) {
-            const file = event.target.files[0];
-            if (!file || !file.name.endsWith('.enc')) {
-                alert("Please upload a valid .enc file.");
-                return;
-            }
+    function clearContainer() {
+        pdfContainer.innerHTML = ''; // Clear all existing pages
+        currentPage = 1; // Reset current page
+    }
 
-            fileNameSpan.textContent = file.name;
+    function handleFileSelection(event) {
+        const file = event.target.files[0];
+        if (!file || !file.name.endsWith('.enc')) {
+            alert("Please upload a valid .enc file.");
+            return;
+        }
 
-            const renamedFile = new File([file], file.name.replace(/\.enc$/, '.pdf'), { type: 'application/pdf' });
+        fileNameSpan.textContent = file.name;
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const pdfData = e.target.result;
-                pdfjsLib.getDocument({ data: pdfData }).promise
-                    .then(function (pdf) {
-                        pdfDoc = pdf;
-                        currentPage = 1;
-                        renderPage(currentPage); // Render the first page
-                        updatePageInfo();
-                    })
-                    .catch(function () {
-                        alert("Failed to load the PDF. Please ensure the file is valid.");
-                    });
+        const renamedFile = new File([file], file.name.replace(/\.enc$/, '.pdf'), { type: 'application/pdf' });
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const pdfData = e.target.result;
+
+            clearContainer(); // Clear container and reset for the new file
+
+            pdfjsLib.getDocument({ data: pdfData }).promise
+                .then(function (pdf) {
+                    pdfDoc = pdf;
+                    renderPage(currentPage); // Render the first page
+                    updatePageInfo();
+                })
+                .catch(function () {
+                    alert("Failed to load the eBook. Please ensure the file is valid.");
+                });
+        };
+
+        reader.readAsArrayBuffer(renamedFile);
+    }
+
+    function renderPage(pageNum) {
+        if (isRendering || pageNum > pdfDoc.numPages || pageNum < 1) {
+            return;
+        }
+
+        // Check if the canvas for the page already exists
+        if (pdfContainer.querySelector(`canvas[data-page-number="${pageNum}"]`)) {
+            return;
+        }
+
+        isRendering = true;
+        pdfDoc.getPage(pageNum).then(function (page) {
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            canvas.dataset.pageNumber = pageNum;
+            pdfContainer.appendChild(canvas);
+
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
             };
 
-            reader.readAsArrayBuffer(renamedFile);
-        }
+            page.render(renderContext).promise.then(function () {
+                isRendering = false;
 
-        function renderPage(pageNum) {
-            if (isRendering || pageNum > pdfDoc.numPages || pageNum < 1) {
-                return;
-            }
-
-            isRendering = true;
-            pdfDoc.getPage(pageNum).then(function (page) {
-                const viewport = page.getViewport({ scale: 1.5 });
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                canvas.dataset.pageNumber = pageNum;
-                pdfContainer.appendChild(canvas);
-
-                const renderContext = {
-                    canvasContext: ctx,
-                    viewport: viewport
-                };
-
-                page.render(renderContext).promise.then(function () {
-                    isRendering = false;
-                });
-            });
-        }
-
-        function updatePageInfo() {
-            const containerTop = pdfContainer.getBoundingClientRect().top;
-            const canvases = Array.from(pdfContainer.querySelectorAll('canvas'));
-
-            for (const canvas of canvases) {
-                const rect = canvas.getBoundingClientRect();
-                if (rect.top >= containerTop && rect.bottom <= window.innerHeight) {
-                    currentPage = parseInt(canvas.dataset.pageNumber, 10);
-                    break;
-                }
-            }
-
-            pageInfo.textContent = `Page ${currentPage} of ${pdfDoc.numPages}`;
-        }
-
-        pdfContainer.addEventListener('scroll', function () {
-            updatePageInfo();
-
-            if (!isRendering && currentPage < pdfDoc.numPages) {
+                // Preload the next page if it's close to the viewport
                 const lastCanvas = pdfContainer.querySelector('canvas:last-of-type');
                 const rect = lastCanvas.getBoundingClientRect();
-
-                if (rect.bottom < window.innerHeight) {
-                    renderPage(currentPage + 1);
+                if (rect.bottom <= window.innerHeight + 50 && pageNum < pdfDoc.numPages) {
+                    renderPage(pageNum + 1);
                 }
-            }
+            });
         });
+    }
 
-        window.handleFileSelection = handleFileSelection;
-    </script>
+    function updatePageInfo() {
+        const containerTop = pdfContainer.getBoundingClientRect().top;
+        const canvases = Array.from(pdfContainer.querySelectorAll('canvas'));
+
+        for (const canvas of canvases) {
+            const rect = canvas.getBoundingClientRect();
+            if (rect.top >= containerTop && rect.bottom <= window.innerHeight) {
+                currentPage = parseInt(canvas.dataset.pageNumber, 10);
+                break;
+            }
+        }
+
+        pageInfo.textContent = `Page ${currentPage} of ${pdfDoc.numPages}`;
+    }
+
+    pdfContainer.addEventListener('scroll', function () {
+        updatePageInfo();
+
+        if (!isRendering && currentPage < pdfDoc.numPages) {
+            const lastCanvas = pdfContainer.querySelector('canvas:last-of-type');
+            const rect = lastCanvas.getBoundingClientRect();
+
+            if (rect.bottom <= window.innerHeight + 50) { // Adjust trigger point
+                renderPage(currentPage + 1);
+            }
+        }
+    });
+
+    window.handleFileSelection = handleFileSelection;
+</script>
+
+
 </body>
 </html>
